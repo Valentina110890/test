@@ -1,0 +1,24 @@
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+# функция, которая будет вызываться при команде /start
+def start(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id, text="Привет! Я телеграм-бот.")
+
+# функция, которая будет вызываться при получении текстового сообщения
+def echo(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+
+# создаем объект для взаимодействия с телеграмом
+updater = Updater(token='6189497044:AAHeShxpaNql-gkyDy1-G8ahTbdBQ1bIeTY', use_context=True)
+
+# создаем обработчики команд и текстовых сообщений
+start_handler = CommandHandler('start', start)
+echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+
+# регистрируем обработчики в апдейтере
+updater.dispatcher.add_handler(start_handler)
+updater.dispatcher.add_handler(echo_handler)
+
+# запускаем бота
+updater.start_polling()
